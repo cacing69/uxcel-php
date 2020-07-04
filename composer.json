@@ -1,0 +1,19 @@
+{
+    "name": "cacing69/uxcel",
+    "description": "unprotect excel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "cacing69",
+            "email": "cacingworm69@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Uxcel\\": "src/Uxcel/"
+        }
+    }
+}
