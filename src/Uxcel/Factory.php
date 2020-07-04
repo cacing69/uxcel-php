@@ -16,7 +16,7 @@ class Factory {
         $this->doc = new \DOMDocument();
     }
 
-	protected function setSource($source)
+	public function setSource($source)
 	{
 		$this->pathInfo = pathinfo($source);
 
@@ -27,7 +27,7 @@ class Factory {
 		return $this;
 	}
 
-	protected function setDestination($destination)
+	public function setDestination($destination)
 	{
 		$this->destination = $destination;
 		return $this;
@@ -64,7 +64,7 @@ class Factory {
 
 		$zip = new \ZipArchive();
 		$zip->open($this->destination.DIRECTORY_SEPARATOR.$this->fileName."-".$this->id.".".$this->ext, \ZIPARCHIVE::CREATE);
-		
+
 		$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY);
 
 		foreach ($files as $file) {
