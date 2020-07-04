@@ -11,6 +11,8 @@ class Factory {
 	private $pathInfo;
 
 	function __construct() {
+		$this->id = uniqid();
+
         $this->doc = new \DOMDocument();
     }
 
@@ -18,21 +20,19 @@ class Factory {
 	{
 		$this->pathInfo = pathinfo($source);
 		$this->source = $source;
+		return $this;
 	}
 
-	protected function setTarget($target)
+	protected function setDestination($destination)
 	{
-		$this->target = $target;
+		$this->destination = $destination;
+		return $this;
 	}
 
-	function unProtect($source, $target){
-
-
-
+	function unProtect(){
 		$zip = new \ZipArchive();
 
-		$dir = $this->target.DIRECTORY_SEPARATOR.$this->pathInfo["filename"].'-'.$this->id ;
-
+		$dir = $this->destination.DIRECTORY_SEPARATOR.$this->pathInfo["filename"].'-'.$this->id ;
 		if ($zip->open($this->source) === true) {
 			$zip->extractTo($dir);
 			$zip->close();
@@ -41,7 +41,6 @@ class Factory {
 		}
 
 		$sheetDir = implode(DIRECTORY_SEPARATOR, [$dir, 'xl', 'worksheets']);
-
 		foreach (glob($sheetDir . DIRECTORY_SEPARATOR . '*.xml') as $sheet) {
 			$this->doc->load($sheet);
 			$element = $this->doc->documentElement;
@@ -54,9 +53,7 @@ class Factory {
 		}
 
 		$zip = new \ZipArchive();
-		
-		$zip->open($this->target.DIRECTORY_SEPARATOR.$this->pathInfo["filename"]."-".$this->id.".".$this->pathInfo["extension"], \ZIPARCHIVE::CREATE);
-
+		$zip->open($this->destination.DIRECTORY_SEPARATOR.$this->pathInfo["filename"]."-".$this->id.".".$this->pathInfo["extension"], \ZIPARCHIVE::CREATE);
 		$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY);
 
 		foreach ($files as $file) {
@@ -67,5 +64,7 @@ class Factory {
 		}
 
 		$zip->close();
+
+		return $this;
 	}
 }
