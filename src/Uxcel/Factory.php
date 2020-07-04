@@ -14,19 +14,21 @@ class Factory {
         $this->doc = new \DOMDocument();
     }
 
-	public function setSource($source)
+	protected function setSource($source)
 	{
 		$this->pathInfo = pathinfo($source);
 		$this->source = $source;
 	}
 
-	public function setTarget($target)
+	protected function setTarget($target)
 	{
 		$this->target = $target;
 	}
 
+	function unProtect($source, $target){
 
-	function unProtect(){
+
+
 		$zip = new \ZipArchive();
 
 		$dir = $this->target.DIRECTORY_SEPARATOR.$this->pathInfo["filename"].'-'.$this->id ;
