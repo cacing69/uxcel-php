@@ -3,7 +3,7 @@ namespace Uxcel;
 
 class Factory {
 	private $source;
-	public $filename;
+	public $fileName;
 	public $id;
 	public $ext;
 	private $target;
@@ -20,7 +20,7 @@ class Factory {
 	{
 		$this->pathInfo = pathinfo($source);
 
-		$this->filename = $this->pathInfo["filename"];
+		$this->fileName = $this->pathInfo["filename"];
 		$this->ext = $this->pathInfo["extension"];
 
 		$this->source = $source;
@@ -41,7 +41,7 @@ class Factory {
 	public function unProtect(){
 		$zip = new \ZipArchive();
 
-		$dir = $this->destination.DIRECTORY_SEPARATOR.$this->filename.'-'.$this->id;
+		$dir = $this->destination.DIRECTORY_SEPARATOR.$this->fileName.'-'.$this->id;
 
 		if ($zip->open($this->source) === true) {
 			$zip->extractTo($dir);
