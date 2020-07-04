@@ -2,23 +2,27 @@
 namespace Uxcel;
 
 class Factory {
-	public $source;
-	protected $target;
-	public $dir;
+	private $source;
+	public $filename;
 	public $id;
-	private $ext;
+	public $ext;
+	private $target;
+	private $dir;
 	private $doc;
 	private $pathInfo;
 
 	function __construct() {
 		$this->id = uniqid();
-
         $this->doc = new \DOMDocument();
     }
 
 	protected function setSource($source)
 	{
 		$this->pathInfo = pathinfo($source);
+
+		$this->filename = $this->pathInfo["filename"];
+		$this->ext = $this->pathInfo["extension"];
+
 		$this->source = $source;
 		return $this;
 	}
@@ -29,10 +33,16 @@ class Factory {
 		return $this;
 	}
 
-	function unProtect(){
+	public function getPathInfo()
+	{
+		return $this->pathInfo;
+	}
+
+	public function unProtect(){
 		$zip = new \ZipArchive();
 
-		$dir = $this->destination.DIRECTORY_SEPARATOR.$this->pathInfo["filename"].'-'.$this->id ;
+		$dir = $this->destination.DIRECTORY_SEPARATOR.$this->filename.'-'.$this->id;
+
 		if ($zip->open($this->source) === true) {
 			$zip->extractTo($dir);
 			$zip->close();
@@ -53,7 +63,8 @@ class Factory {
 		}
 
 		$zip = new \ZipArchive();
-		$zip->open($this->destination.DIRECTORY_SEPARATOR.$this->pathInfo["filename"]."-".$this->id.".".$this->pathInfo["extension"], \ZIPARCHIVE::CREATE);
+		$zip->open($this->destination.DIRECTORY_SEPARATOR.$this->fileName."-".$this->id.".".$this->ext, \ZIPARCHIVE::CREATE);
+		
 		$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY);
 
 		foreach ($files as $file) {
@@ -64,7 +75,6 @@ class Factory {
 		}
 
 		$zip->close();
-
 		return $this;
 	}
 }
